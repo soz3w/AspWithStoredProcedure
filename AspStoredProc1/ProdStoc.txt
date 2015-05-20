@@ -1,0 +1,30 @@
+﻿USE [master]
+GO
+/****** Object:  StoredProcedure [dbo].[SaveID]    Script Date: 20/05/2015 18:49:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[SaveID](@ID int,@Name varchar(50))	
+AS
+BEGIN
+	if @Name <> ''
+	begin
+		if not exists(select * from tblSimple where ID=@ID)
+		begin
+			insert into tblSimple(Name)
+			select  @Name
+		end
+		else
+		begin
+			Update tblSimple
+			set Name=@Name
+			where ID = @ID
+		end
+	end
+	else
+	begin
+		delete tblSimple where ID = @ID
+	end
+	
+END
